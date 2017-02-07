@@ -2,23 +2,20 @@ var inquirer = require("inquirer");
 var Letter = require("./Letter");
 var Word = require("./Word");
 
-var lives = 10;
 var dashedWord = "";
 
-console.log("Mythical Creatures Hangman!");
+console.log("Mythology Hangman!");
 console.log("Instructions: Guess a letter until you complete the word or lose.");
 console.log("--------------------------------------------------------------------");
 
-var wordArray = [
-	"Cats",
-	"Bullets",
-	"Gyroscope",
-	"Jeans",
-	"Death",
-	"Shiva",
-	"Reddit",
-	"Blunt"
-];
+var game = {
+	wordArray: ["Shiva", "Zues", "Minotaur", "Medusa", "Amaterasu",
+				"Kyuubi", "Isis", "Anubis", "Kali"],
+	lives: 10,
+	
+
+
+}
 
 var word = wordArray[Math.floor(Math.random() * wordArray.length)];
 
