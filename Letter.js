@@ -1,13 +1,13 @@
 // `Letter.js` should control whether or not a letter 
 // appears as a "_" or as itself on-screen.
 
-var lettCtrl = function(letter) {
-    this.blank = function() {
-        return "_";
-    };
-    this.space = function() {
-        return " ";
-    };
+function letterShow(letter, found) {
+	this.letter = letter;
+	this.found = false;
 };
+letterShow.prototype.show = function () {
+	if (this.found) return this.letter;
+	else return "_";
+}
 
-exports.lettCtrl = lettCtrl;
+module.exports = letterShow;

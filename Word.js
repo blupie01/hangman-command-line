@@ -1,38 +1,47 @@
  // * `Word.js` should contain all of the methods which will 
  // check the letters guessed versus the random word selected.
-
 var letter = require("./letter.js");
 
-function wordAudit(word, inputLetter) {
-	//Array to hold the split hidden word
-	this.splitWord = [];
-	//The word chosen to be guessed
+var Word = function(word) {
 	this.word = word;
-	//Guessed letter
-	this.inputLetter = inputLetter;
+	this.lettersArray = [];
+	// this.string = ""
+	console.log("Here: " + word);
+	for (var i = 0; i < this.word.length; i++) {
+		//pass in each letter to letter.js and get letter(object)
+		this.lettersArray.push(new letter(this.word[i]));
+	}
+	return this.lettersArray;
 
-	//Function to create a hidden word
-	this.createHiddenWord = function() {
-		for (var i = 0; i < word.length; i++) {
-			var letToHide = new letter(word[i]);
-			if (word[i].valueOf() === " ") {
-				splitWord.push(letToHide.space());
-			} else {
-				splitWord.push(letToHide.blank());
-			};
+	// for (var l = 0; l < this.lettersArray.length; l++) {
+	// 	var currentLetter = this.lettersArray[l];
+	// 	this.string += currentLetter.show() + " ";
+	// }
+	// return this.string;
+}
+Word.prototype.display = function() {
+	this.string = "";
+
+	for (var l = 0; l < this.lettersArray.length; l++) {
+		var currentLetter = this.lettersArray[l];
+		this.string += currentLetter.show() + " ";
+	}
+	return this.string;
+
+	// for(var i = 0; i < this.lettersArray.length; i++) {
+	// 	this.string += this.lettersArray[i].letter;
+	// 	console.log(string);
+	// 	return this.string;
+	// }
+	// return this.string;
+	// console.log(this.string);
+}
+Word.prototype.updateLetter = function(guess) {
+	for (var i = 0; i < this.lettersArray.length; i++) {
+		if (this.lettersArray[i].letter == guess) {
+			this.lettersArray[i].found = true;
 		};
 	};
+};
 
-	this.check = function(lettGuess) {
-		var lettUp = lettGuess.toUpperCase();
-
-		if (word.indexOf(lettGuess) === -1) {
-			lives--;
-		} else {
-			for (var i = 0; i < splitWord.length; i++) {
-				if (word[i].valueOf() === lettUp)
-			}
-		}
-	}
-
-}
+module.exports = Word;

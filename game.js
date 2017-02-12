@@ -1,36 +1,31 @@
 var inquirer = require("inquirer");
-var wordAudit = require("./word.js");
+var word = require("./word.js");
 var colors = require("colors");
-var chooseWord = require("./chooseWord.js")
 
-var lives = 10;
-var letter = "";
+var wordArray = ["SHIVA", "ZUES", "MINOTAUR", "MEDUSA", "AMATERASU",
+				"KYUUBI", "ISIS", "ANUBIS", "KALI"];
 
-console.log("Mythology Hangman!");
-console.log("Instructions: Guess a letter until you complete the word or lose.");
-console.log("--------------------------------------------------------------------");
+var startGame = function() {
+	this.currentWord = new word(wordArray[Math.floor(Math.random() * wordArray.length)]);
 
-function startGame() {
-	var word = new chooseWord();
-	console.log(word);
-	var hiddenWord = new wordAudit(word);
+	this.lives = 10;
+	this.guesses = [];
 
-	letter = guessLetter();
+	console.log(currentWord);
+	currentWord.display;
 
-
-};
+}
 
 startGame();
 
-//----------FUNCTIONS------------------------------------------------
-
-function guessLetter(){
+var getGuess = function() {
 	inquirer.prompt([
-	  {type: "input",
-	    name: "letter",
-	    message: "What's your letter?"}
-	]).then(function(data){
-	    var letGuess = data;
-	    return letGuess;
+		{
+			type: "input",
+			name: "guess",
+			message: "Guess a letter."
+		}
+	]).then(function(data) {
+		currentWord.updateLetter(data.guess);
 	});
 };
