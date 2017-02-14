@@ -2,6 +2,7 @@ var inquirer = require("inquirer");
 var Word = require("./Word.js");
 var Letter = require("./Letter.js");
 var colors = require("colors");
+var chalk = require("chalk");
 
 var wordArray = ["LOCHNESS MONSTER", "SHIVA", "ZUES", "MINOTAUR", "MEDUSA", 
 				"AMATERASU", "KYUUBI", "ISIS", "ANUBIS", "KALI" ];
@@ -12,12 +13,16 @@ var lives = 10;
 var guessesArray = [];
 var lettersArray = [];
 
-console.log("------------------------------------------------------------------");
-console.log("-------------------------Mythical Hangman-------------------------");
-console.log("-------------------Guess letters until you win!-------------------");
-console.log("------------------------You have 10 lives.------------------------");
-console.log("----------------------------Good Luck!----------------------------");
-console.log("------------------------------------------------------------------\n");
+console.log(chalk.white.bgCyan("------------------------------------------------------------------"));
+console.log(chalk.bgCyan("-------------------------") + 
+			chalk.bgRed.green("Mythical Hangman") + chalk.bgCyan("-------------------------"));
+console.log(chalk.bgCyan("-------------------") + chalk.bgRed.green("Guess letters until you win!") + 
+			chalk.bgCyan("-------------------"));
+console.log(chalk.bgCyan("------------------------") + chalk.bgRed.green("You have 10 lives.") + 
+			chalk.bgCyan("------------------------"));
+console.log(chalk.bgCyan("----------------------------") + chalk.bgRed.green("Good Luck!") + 
+			chalk.bgCyan("----------------------------"));
+console.log(chalk.white.bgCyan("------------------------------------------------------------------"));
 
 var startGame = function() {
 	getWord = new Word(wordArray[Math.floor(Math.random() * wordArray.length)]);
@@ -35,40 +40,48 @@ var startGame = function() {
 };
 
 var getGuess = function() {
-	console.log("Word to guess: ");
+	console.log("\n" + chalk.bgYellow.magenta(lives + " lives remaining."));
+	console.log("Word to guess: ".bgMagenta);
 	displayWord();
+	console.log(("Guesses: ").bgRed.blue + guessesArray);
 	inquirer.prompt({
 		type: "input",
 		name: "guess",
-		message: "What is your guess: "
+		message: "What is your guess: ".green
 	}).then(function(data) {
-		var letterUp = data.guess.toUpperCase();
-		guessesArray.push(letterUp);
 
-		if (getWord.check(data.guess.toUpperCase(), lettersArray) == true) {
-			console.log("Letter Found!");
-			console.log(lives + " lives remaining.");
-			displayWord();
-		} else {
-			lives --;
-			if (lives > 0) {
-				console.log("Wrong. Guess again!");
-				console.log(lives + " lives remaining.");
+		var letterUp = data.guess.toUpperCase();
+
+		if(letterUp.length > 1) {
+			console.log("Only one letter at a time. Guess again.".bold.inverse.red);
+			getGuess();
+		} else if (guessesArray.indexOf(letterUp) == -1) {
+			guessesArray.push(letterUp);
+
+			if (getWord.check(data.guess.toUpperCase(), lettersArray) == true) {
+				console.log("Letter Found!".bgGreen.magenta);
 			} else {
-				console.log("Out of lives. Game over.");
+				lives --;
+				if (lives > 0) {
+					console.log("Wrong. Guess again!".red.bgWhite);
+				} else {
+					console.log("\n" + "OUT OF LIVES. GAME OVER.".bold.red.bgWhite + "\n");
+					restart();
+				};
+			};
+
+			if (getWord.isSolved(lettersArray) == false) {
+				if (lives > 0) {
+					getGuess();
+				};
+			} else {
+				displayWord();
+				console.log("\n" + "YOU WIN!".rainbow.bgWhite + "\n");
 				restart();
 			};
-		};
-
-		if (getWord.isSolved(lettersArray) == false) {
-			if (lives > 0) {
-				console.log("Guesses: " + guessesArray);
-				getGuess();
-			};
 		} else {
-			displayWord();
-			console.log("You guessed the word!")
-			restart();
+			console.log("YOU ALREADY GUESSED THAT LETTER!".underline.red.bgWhite);
+			getGuess();
 		};
 	});
 };
@@ -89,16 +102,16 @@ var restart = function() {
 	inquirer.prompt({
 		type: "confirm",
 		name: "restart",
-		message: "Play again? "
+		message: "Play again? ".rainbow.bgWhite
 	}).then(function(data) {
 		if (data.restart) {
-			console.log("Restarting...");
+			console.log("\n" + "Restarting...".america + "\n");
 			lives = 10;
 			guessesArray = [];
 			lettersArray = [];
 			startGame();
 		} else {
-			console.log("Ending Game.");
+			console.log("\n" + "Ending Game.".zebra + "\n");
 		}
 	});
 };

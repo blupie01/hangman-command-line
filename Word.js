@@ -13,12 +13,7 @@ var Word = function(word) {
 				found = true;
 			};
 		};
-
-		if (found == true) {
-			return true;
-		} else { 
-			return false;
-		};
+		return found;
 	};
 
 	this.isSolved = function(array) {
